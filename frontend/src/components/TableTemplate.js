@@ -30,9 +30,10 @@ const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
+                                            console.log("row and column value",{value,column,row})
                                             return (
                                                 <StyledTableCell key={column.id} align={column.align}>
                                                     {

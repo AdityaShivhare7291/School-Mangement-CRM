@@ -5,9 +5,15 @@ const Teacher = require('../models/teacherSchema.js');
 
 const sclassCreate = async (req, res) => {
     try {
+        console.log("This api got hits",{data:req.body})
         const sclass = new Sclass({
-            sclassName: req.body.sclassName,
+            className: req.body.sclassName,
+            year:req.body.syear,
+            teacher:null,
+            fees:req.body.sfees,
+            students:[],
             school: req.body.adminID
+
         });
 
         const existingSclassByName = await Sclass.findOne({
@@ -29,6 +35,7 @@ const sclassCreate = async (req, res) => {
 
 const sclassList = async (req, res) => {
     try {
+        console.log("Sclass is searching on")
         let sclasses = await Sclass.find({ school: req.params.id })
         if (sclasses.length > 0) {
             res.send(sclasses)
@@ -42,6 +49,7 @@ const sclassList = async (req, res) => {
 
 const getSclassDetail = async (req, res) => {
     try {
+        console.log("Sclass details is searching on")
         let sclass = await Sclass.findById(req.params.id);
         if (sclass) {
             sclass = await sclass.populate("school", "schoolName")

@@ -14,7 +14,7 @@ const sclassSchema = new mongoose.Schema({
         ref:'teacher'
     },
     fees:{
-        type:String,
+        type:Number,
         required:true,
     },
     students:[{
@@ -27,5 +27,5 @@ const sclassSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model("student", sclassSchema);
+module.exports = mongoose.model("class", sclassSchema);
 

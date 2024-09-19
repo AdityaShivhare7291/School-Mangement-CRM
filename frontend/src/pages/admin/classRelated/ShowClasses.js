@@ -26,8 +26,10 @@ const ShowClasses = () => {
   const adminID = currentUser._id
 
   useEffect(() => {
+    console.log("get all classes function call happens")
     dispatch(getAllSclasses(adminID, "Sclass"));
   }, [adminID, dispatch]);
+
 
   if (error) {
     console.log(error)
@@ -142,6 +144,8 @@ const ShowClasses = () => {
     },
   ];
 
+ 
+
   return (
     <>
       {loading ?
@@ -156,6 +160,7 @@ const ShowClasses = () => {
             </Box>
             :
             <>
+            <h1>loaded</h1>
               {Array.isArray(sclassesList) && sclassesList.length > 0 &&
                 <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
               }
