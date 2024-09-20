@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
 import { getClassDetails, getClassStudents, getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
-import { deleteUser } from '../../../redux/userRelated/userHandle';
+import axios from 'axios'
 import {
     Box, Container, Typography, Tab, IconButton
 } from '@mui/material';
@@ -23,7 +23,9 @@ const ClassDetails = () => {
     const params = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch();
+
     const { subjectsList, sclassStudents, sclassDetails, loading, error, response, getresponse } = useSelector((state) => state.sclass);
+    const [teacherDetails, setTeacherDetails] = useState([]);
 
     const classID = params.id
 
@@ -31,6 +33,13 @@ const ClassDetails = () => {
         dispatch(getClassDetails(classID, "Sclass"));
         dispatch(getSubjectList(classID, "ClassSubjects"))
         dispatch(getClassStudents(classID));
+        const fetchData = async () => {
+            const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/getTeacherOfClass/${classID}`);
+            setTeacherDetails(result.data)
+            console.log("class details teachers data", result.data)
+        }
+        fetchData();
+        console.log({ subjectsList, sclassStudents, sclassDetails })
     }, [dispatch, classID])
 
     if (error) {
@@ -51,12 +60,6 @@ const ClassDetails = () => {
         console.log(address);
         setMessage("Sorry the delete function has been disabled for now.")
         setShowPopup(true)
-        // dispatch(deleteUser(deleteID, address))
-        //     .then(() => {
-        //         dispatch(getClassStudents(classID));
-        //         dispatch(resetSubjects())
-        //         dispatch(getSubjectList(classID, "ClassSubjects"))
-        //     })
     }
 
     const subjectColumns = [
@@ -203,15 +206,78 @@ const ClassDetails = () => {
         )
     }
 
+    const teacherColumns = [
+        { id: 'name', label: 'Name', minWidth: 170 },
+        { id: 'gender', label: 'Gender', minWidth: 100 },
+        { id: 'contactDetails', label: 'Phone-No', minWidth: 170 },
+        { id: 'salary', label: 'Salary', minWidth: 100 },
+    ]
+
+    const TeacherButtonHaver = ({ row }) => {
+        return (
+            <>
+                <IconButton onClick={() => deleteHandler(row.id, "Student")}>
+                    <PersonRemoveIcon color="error" />
+                </IconButton>
+                <BlueButton
+                    variant="contained"
+                    onClick={() => navigate("/Admin/teachers/teacher/" + row.id)}
+                >
+                    View
+                </BlueButton>
+
+            </>
+        );
+    };
+
+
+
+    const teacherRows = teacherDetails[0]?.map((teacher) => {
+        console.log("teacher data are", {
+            teacher,
+            name: teacher.name,
+            gender: teacher.gender,
+            contactDetails: teacher.contactDetails,
+            salary: teacher.salary
+        })
+        return {
+            name: teacher.name,
+            gender: teacher.gender,
+            contactDetails: teacher.contactDetails,
+            salary: teacher.salary
+        };
+    })
+
     const ClassTeachersSection = () => {
         return (
             <>
-                Teachers
+                {getresponse ? (
+                    <>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                            <GreenButton
+                                variant="contained"
+                                onClick={() => navigate("/Admin/class/addteachers/" + classID)}
+                            >
+                                Add Teachers
+                            </GreenButton>
+                        </Box>
+                    </>
+                ) : (
+                    <>
+                        <Typography variant="h5" gutterBottom>
+                            Teacher's List:
+                        </Typography>
+
+                        <TableTemplate buttonHaver={TeacherButtonHaver} columns={teacherColumns} rows={teacherRows} />
+                        <SpeedDialTemplate actions={studentActions} />
+                    </>
+                )}
             </>
         )
     }
 
     const ClassDetailsSection = () => {
+        console.log("the class details are", { subjectsList, sclassStudents })
         const numberOfSubjects = subjectsList.length;
         const numberOfStudents = sclassStudents.length;
 
@@ -221,7 +287,7 @@ const ClassDetails = () => {
                     Class Details
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    This is Class {sclassDetails && sclassDetails.sclassName}
+                    This is Class {sclassDetails && sclassDetails.className}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     Number of Subjects: {numberOfSubjects}

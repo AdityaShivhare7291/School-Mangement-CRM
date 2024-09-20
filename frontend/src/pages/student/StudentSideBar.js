@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Divider, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-
 import HomeIcon from '@mui/icons-material/Home';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
 
 const StudentSideBar = () => {
     const location = useLocation();
@@ -26,6 +26,12 @@ const StudentSideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Subjects" />
                 </ListItemButton>
+                <ListItemButton component={Link} to="/Student/teacher">
+                    <ListItemIcon>
+                        <SupervisorAccountOutlinedIcon color={location.pathname.startsWith("/Student/teacher") ? 'primary' : 'inherit'} />
+                    </ListItemIcon>
+                    <ListItemText primary="Teacher" />
+                </ListItemButton>
                 <ListItemButton component={Link} to="/Student/attendance">
                     <ListItemIcon>
                         <ClassOutlinedIcon color={location.pathname.startsWith("/Student/attendance") ? 'primary' : 'inherit'} />
@@ -38,6 +44,7 @@ const StudentSideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Complain" />
                 </ListItemButton>
+
             </React.Fragment>
             <Divider sx={{ my: 1 }} />
             <React.Fragment>

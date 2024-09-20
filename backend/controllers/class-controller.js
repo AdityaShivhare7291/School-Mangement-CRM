@@ -5,13 +5,12 @@ const Teacher = require('../models/teacherSchema.js');
 
 const sclassCreate = async (req, res) => {
     try {
-        console.log("This api got hits",{data:req.body})
         const sclass = new Sclass({
             className: req.body.sclassName,
-            year:req.body.syear,
-            teacher:null,
-            fees:req.body.sfees,
-            students:[],
+            year: req.body.syear,
+            teacher: [],
+            fees: req.body.sfees,
+            students: [],
             school: req.body.adminID
 
         });
@@ -35,11 +34,11 @@ const sclassCreate = async (req, res) => {
 
 const sclassList = async (req, res) => {
     try {
-        console.log("Sclass is searching on")
         let sclasses = await Sclass.find({ school: req.params.id })
         if (sclasses.length > 0) {
             res.send(sclasses)
         } else {
+            console.log(e);
             res.send({ message: "No sclasses found" });
         }
     } catch (err) {
@@ -49,7 +48,6 @@ const sclassList = async (req, res) => {
 
 const getSclassDetail = async (req, res) => {
     try {
-        console.log("Sclass details is searching on")
         let sclass = await Sclass.findById(req.params.id);
         if (sclass) {
             sclass = await sclass.populate("school", "schoolName")
@@ -65,7 +63,7 @@ const getSclassDetail = async (req, res) => {
 
 const getSclassStudents = async (req, res) => {
     try {
-        let students = await Student.find({ sclassName: req.params.id })
+        let students = await Student.find({ className: req.params.id })
         if (students.length > 0) {
             let modifiedStudents = students.map((student) => {
                 return { ...student._doc, password: undefined };

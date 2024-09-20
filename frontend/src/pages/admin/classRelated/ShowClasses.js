@@ -3,11 +3,9 @@ import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip } from '@mui/mat
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteUser } from '../../../redux/userRelated/userHandle';
 import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
 import { BlueButton, GreenButton } from '../../../components/buttonStyles';
 import TableTemplate from '../../../components/TableTemplate';
-
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -26,7 +24,6 @@ const ShowClasses = () => {
   const adminID = currentUser._id
 
   useEffect(() => {
-    console.log("get all classes function call happens")
     dispatch(getAllSclasses(adminID, "Sclass"));
   }, [adminID, dispatch]);
 
@@ -43,19 +40,19 @@ const ShowClasses = () => {
     console.log(address);
     setMessage("Sorry the delete function has been disabled for now.")
     setShowPopup(true)
-    // dispatch(deleteUser(deleteID, address))
-    //   .then(() => {
-    //     dispatch(getAllSclasses(adminID, "Sclass"));
-    //   })
   }
 
   const sclassColumns = [
-    { id: 'name', label: 'Class Name', minWidth: 170 },
+    { id: 'name', label: 'Class Name', minWidth: 60 },
+    { id: 'fees', label: 'Fees P.A', minWidth: 60 },
+    { id: 'teacher', label: 'Teacher Number', minWidth: 60 }
   ]
 
   const sclassRows = sclassesList && sclassesList.length > 0 && sclassesList.map((sclass) => {
     return {
-      name: sclass.sclassName,
+      name: sclass.className,
+      fees: sclass.fees,
+      teacher: sclass.teachers.length,
       id: sclass._id,
     };
   })
@@ -144,7 +141,7 @@ const ShowClasses = () => {
     },
   ];
 
- 
+
 
   return (
     <>
@@ -160,7 +157,7 @@ const ShowClasses = () => {
             </Box>
             :
             <>
-            <h1>loaded</h1>
+              <h1>loaded</h1>
               {Array.isArray(sclassesList) && sclassesList.length > 0 &&
                 <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
               }

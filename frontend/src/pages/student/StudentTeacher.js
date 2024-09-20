@@ -9,6 +9,7 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { StyledTableCell, StyledTableRow } from '../../components/styles';
+import axios from 'axios';
 
 const StudentSubjects = () => {
 
@@ -16,8 +17,18 @@ const StudentSubjects = () => {
     const { subjectsList, sclassDetails } = useSelector((state) => state.sclass);
     const { userDetails, currentUser, loading, response, error } = useSelector((state) => state.user);
 
+    const [teacherData, setTeachersData] = useState()
+
     useEffect(() => {
+        console.log({ currentUser })
         dispatch(getUserDetails(currentUser._id, "Student"));
+        console.log({ ans: currentUser._id })
+        let className = currentUser.className.className
+        const fetchData = async () => {
+            const teachers = await axios.get(`${process.env.REACT_APP_BASE_URL}/StudentTeacher/${className}`);
+            setTeachersData(teachers)
+        }
+        fetchData()
     }, [dispatch, currentUser._id])
 
     if (response) { console.log(response) }
@@ -82,13 +93,13 @@ const StudentSubjects = () => {
         return (
             <Container>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Class Details
+                    Teacher Details
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    You are currently in Class {sclassDetails && sclassDetails.sclassName}
+                    You are currently in Class {currentUser.className.className}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    And these are the subjects:
+                    And these are the teachers:
                 </Typography>
                 {subjectsList &&
                     subjectsList.map((subject, index) => (

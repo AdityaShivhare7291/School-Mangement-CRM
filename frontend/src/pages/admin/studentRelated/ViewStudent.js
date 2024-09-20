@@ -31,13 +31,17 @@ const ViewStudent = () => {
     const studentID = params.id
     const address = "Student"
 
+    console.log("reload details of view students", userDetails, studentID)
+
     useEffect(() => {
         dispatch(getUserDetails(studentID, address));
+        console.log("student details", userDetails)
     }, [dispatch, studentID])
 
     useEffect(() => {
-        if (userDetails && userDetails.sclassName && userDetails.sclassName._id !== undefined) {
-            dispatch(getSubjectList(userDetails.sclassName._id, "ClassSubjects"));
+        console.log("userDetails", userDetails)
+        if (userDetails && userDetails.className && userDetails.className._id !== undefined) {
+            dispatch(getSubjectList(userDetails.className._id, "ClassSubjects"));
         }
     }, [dispatch, userDetails]);
 
@@ -340,13 +344,14 @@ const ViewStudent = () => {
     }
 
     const StudentDetailsSection = () => {
+        console.log("userDetails", { userDetails })
         return (
             <div>
                 Name: {userDetails.name}
                 <br />
                 Roll Number: {userDetails.rollNum}
                 <br />
-                Class: {sclassName.sclassName}
+                Class: {userDetails?.className?.className ?? null}
                 <br />
                 School: {studentSchool.schoolName}
                 {

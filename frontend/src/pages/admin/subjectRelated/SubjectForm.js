@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Grid, Box, Typography, CircularProgress } from "@mui/material";
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
@@ -8,6 +8,7 @@ import Popup from '../../../components/Popup';
 
 const SubjectForm = () => {
     const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+    const [teacher, setTeacher] = useState();
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -58,14 +59,20 @@ const SubjectForm = () => {
             subName: subject.subName,
             subCode: subject.subCode,
             sessions: subject.sessions,
+            teacherName: teacher
         })),
         adminID,
     };
 
     const submitHandler = (event) => {
-        event.preventDefault();
-        setLoader(true)
-        dispatch(addStuff(fields, address))
+        try {
+            event.preventDefault();
+            setLoader(true)
+            dispatch(addStuff(fields, address))
+            navigate('/Admin/subjects')
+        } catch (e) {
+            console.log("error in subject form");
+        }
     };
 
     useEffect(() => {
@@ -101,6 +108,17 @@ const SubjectForm = () => {
                                 variant="outlined"
                                 value={subject.subName}
                                 onChange={handleSubjectNameChange(index)}
+                                sx={styles.inputField}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
+                                label="Teacher Name"
+                                variant="outlined"
+                                value={teacher}
+                                onChange={(event) => { setTeacher(event.target.value) }}
                                 sx={styles.inputField}
                                 required
                             />

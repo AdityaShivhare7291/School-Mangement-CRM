@@ -20,7 +20,9 @@ const ShowSubjects = () => {
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
+        console.log("Before error");
         dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+        console.log("after error", subjectsList)
     }, [currentUser._id, dispatch]);
 
     if (error) {
@@ -49,11 +51,12 @@ const ShowSubjects = () => {
     ]
 
     const subjectRows = subjectsList.map((subject) => {
+        console.log({ subject })
         return {
             subName: subject.subName,
             sessions: subject.sessions,
-            sclassName: subject.sclassName.sclassName,
-            sclassID: subject.sclassName._id,
+            sclassName: subject.className.className,
+            sclassID: subject.className._id,
             id: subject._id,
         };
     })
@@ -89,6 +92,7 @@ const ShowSubjects = () => {
                 <div>Loading...</div>
                 :
                 <>
+                    <h1>classes</h1>
                     {response ?
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"

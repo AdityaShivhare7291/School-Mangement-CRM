@@ -8,10 +8,11 @@ const subjectCreate = async (req, res) => {
             subName: subject.subName,
             subCode: subject.subCode,
             sessions: subject.sessions,
+            teacher: null
         }));
 
         const existingSubjectBySubCode = await Subject.findOne({
-            'subjects.subCode': subjects[0].subCode,
+            'subCode': subjects[0].subCode,
             school: req.body.adminID,
         });
 
@@ -20,11 +21,15 @@ const subjectCreate = async (req, res) => {
         } else {
             const newSubjects = subjects.map((subject) => ({
                 ...subject,
-                sclassName: req.body.sclassName,
+                className: req.body.sclassName,
                 school: req.body.adminID,
             }));
+            try {
+                const result = await Subject.insertMany(newSubjects);
+            } catch (e) {
+                console.log("The error is ", result)
+            }
 
-            const result = await Subject.insertMany(newSubjects);
             res.send(result);
         }
     } catch (err) {
@@ -34,21 +39,43 @@ const subjectCreate = async (req, res) => {
 
 const allSubjects = async (req, res) => {
     try {
-        let subjects = await Subject.find({ school: req.params.id })
-            .populate("sclassName", "sclassName")
+        let subjects = await Subject.find({ school: req.params.id }).populate('className', 'className')
+        console.log("subjects are", { subjects })
         if (subjects.length > 0) {
             res.send(subjects)
         } else {
             res.send({ message: "No subjects found" });
         }
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 };
 
+const subjectWithNoTeacher = async (req, res) => {
+    try {
+        let subjects = await Subject.find()
+        if (subjects.length > 0) {
+            const subjectsWithNoTeacher = subjects.filter((subject) => {
+                return subject.teacher ? false : true;
+            })
+            if (!subjectWithNoTeacher.length) {
+                res.send({ message: "No subjects found" });
+            } else {
+                res.send(subjectsWithNoTeacher)
+            }
+        } else {
+            res.send({ message: "No subjects found" });
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+}
+
 const classSubjects = async (req, res) => {
     try {
-        let subjects = await Subject.find({ sclassName: req.params.id })
+        let subjects = await Subject.find({ className: req.params.id })
         if (subjects.length > 0) {
             res.send(subjects)
         } else {
@@ -74,10 +101,12 @@ const freeSubjectList = async (req, res) => {
 
 const getSubjectDetail = async (req, res) => {
     try {
+        console.log("subject searching is on")
         let subject = await Subject.findById(req.params.id);
         if (subject) {
-            subject = await subject.populate("sclassName", "sclassName")
+            subject = await subject.populate("className", "className")
             subject = await subject.populate("teacher", "name")
+            console.log(subject);
             res.send(subject);
         }
         else {
@@ -161,4 +190,4 @@ const deleteSubjectsByClass = async (req, res) => {
 };
 
 
-module.exports = { subjectCreate, freeSubjectList, classSubjects, getSubjectDetail, deleteSubjectsByClass, deleteSubjects, deleteSubject, allSubjects };
+module.exports = { subjectCreate, freeSubjectList, classSubjects, getSubjectDetail, deleteSubjectsByClass, deleteSubjects, deleteSubject, allSubjects, subjectWithNoTeacher };
