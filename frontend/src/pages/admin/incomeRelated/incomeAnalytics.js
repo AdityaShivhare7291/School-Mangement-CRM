@@ -35,6 +35,14 @@ const IncomeAnalytics = () => {
     const [totalEarningTeacher, setTotalEarningTeacher] = useState();
     const [chartTypeTeacher, setChartTypeTeacher] = useState('yearly');
 
+
+    const [selectYearTeacherNet, setSelectYearTeacherNet] = useState(2024);
+    const [yearlyEarningTeacherNet, setYearlyEarningTeacherNet] = useState([]);
+    const [monthlyEaringTeacherNet, setMonthlyEarningTeacherNet] = useState([]);
+    const [yearsTeacherNet, setYearsTeacherNet] = useState([]);
+    const [totalEarningTeacherNet, setTotalEarningTeacherNet] = useState();
+    const [chartTypeTeacherNet, setChartTypeTeacherNet] = useState('yearly');
+
     const adminID = currentUser._id
 
     const monthName = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "september", "Octomber", "November", "December"]
@@ -219,6 +227,40 @@ const IncomeAnalytics = () => {
         TeacherEarning()
     }, [sclassesList, teachersList, chartTypeTeacher, selectYearTeacher])
 
+    useEffect(() => {
+        if (chartTypeTeacherNet === 'yearly') {
+            setChartType('yearly');
+            setChartTypeTeacher('yearly');
+        } else if (chartTypeTeacherNet === 'monthly') {
+            setChartType('monthly');
+            setChartTypeTeacher('monthly');
+            setSelectYear(selectYearTeacherNet);
+            setSelectYearTeacherNet(selectYearTeacherNet);
+        }
+    }, [sclassesList, teachersList, chartTypeTeacherNet])
+
+    useEffect(() => {
+
+        if (chartTypeTeacherNet === 'yearly') {
+            let ans = [];
+            for (let i = 0; i < yearlyEarning.length; i++) {
+                ans.push(yearlyEarning[i] - yearlyEarningTeacher[i]);
+            }
+            console.log("nettt monthly earnings", { ans })
+            setYearlyEarningTeacherNet(ans);
+        }
+        else if (chartTypeTeacherNet === 'monthly') {
+            let ans = []
+            for (let i = 0; i < monthlyEaring.length; i++) {
+                ans.push(monthlyEaring[i] - monthlyEaringTeacher[i]);
+            }
+            console.log("nettt yearly earnings", { ans })
+            setMonthlyEarningTeacherNet(ans);
+        }
+
+
+    }, [yearlyEarning, yearlyEarningTeacher, monthlyEaring, monthlyEaringTeacher])
+
     const numberOfStudents = studentsList && studentsList.length;
     const numberOfClasses = sclassesList && sclassesList.length;
     const numberOfTeachers = teachersList && teachersList.length;
@@ -313,6 +355,33 @@ const IncomeAnalytics = () => {
                                             </select>
                                         </div>
                                         <GenderDoughnutChart chartType={'bar'} labels={monthName} dataValues={monthlyEaringTeacher} backgroundColor={['#36A2EB', '#FF6384']} label={'Monthly expenditure from teacher'} />
+                                    </div>)
+                            }
+                        </div>
+
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={12}>
+                        <div>
+                            <div>
+                                <select value={chartTypeTeacherNet} onChange={(e) => setChartTypeTeacherNet(e.target.value)}>
+                                    <option value="yearly">Yearly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            {chartTypeTeacherNet === "yearly" ?
+                                (<GenderDoughnutChart chartType={'bar'} labels={years} dataValues={yearlyEarningTeacherNet} backgroundColor={['#36A2EB', '#FF6384']} label={'Yearly Net Gain'} />) :
+                                (
+                                    <div>
+                                        <div>
+                                            <select value={selectYearTeacherNet} onChange={(e) => setSelectYearTeacherNet(e.target.value)}>
+                                                {years?.map((year) => (
+                                                    <option key={year} value={year}>
+                                                        {year}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <GenderDoughnutChart chartType={'bar'} labels={monthName} dataValues={monthlyEaringTeacherNet} backgroundColor={['#36A2EB', '#FF6384']} label={'Monthly Net Gain'} />
                                     </div>)
                             }
                         </div>
