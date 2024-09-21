@@ -9,6 +9,10 @@ const sclassSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    limit: {
+        type: Number,
+        required: true,
+    },
     teachers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'teacher'

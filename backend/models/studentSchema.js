@@ -42,6 +42,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         default: "Student"
     },
+    createdAt: {
+        type: Date,
+        default: Date.now  // Automatically set the current date when the document is created
+    },
     examResult: [
         {
             subName: {

@@ -18,13 +18,23 @@ const studentRegister = async (req, res) => {
             res.send({ message: 'Roll Number already exists' });
         }
         else {
+
+            let id = req.body.className
+
+            const classLength = await sclassSchema.findById(id);
+            let studentsAvailaible = classLength.students.length;
+
+            if (studentsAvailaible >= classLength.limit) {
+                throw new Error('Insertion cannot be done: The class limit has been reached.');
+            }
+
             const student = new Student({
                 ...req.body,
                 school: req.body.adminID,
                 password: hashedPass
             });
+
             try {
-                let id = req.body.className
                 await sclassSchema.findByIdAndUpdate(id, {
                     $push: { students: student._id },
                 })

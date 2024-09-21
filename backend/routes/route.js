@@ -24,6 +24,7 @@ const {
     removeStudentAttendance } = require('../controllers/student_controller.js');
 const { subjectCreate, classSubjects, deleteSubjectsByClass, getSubjectDetail, deleteSubject, freeSubjectList, allSubjects, deleteSubjects, subjectWithNoTeacher } = require('../controllers/subject-controller.js');
 const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherSubject, teacherAttendance, getClassTeacher, getStudentTeachersDetails } = require('../controllers/teacher-controller.js');
+const { girlsBoysCount, techerGenderCount } = require('../controllers/analytics.js')
 
 // Admin
 router.post('/AdminReg', adminRegister);
@@ -119,5 +120,9 @@ router.delete("/Subject/:id", deleteSubject)
 router.delete("/Subjects/:id", deleteSubjects)
 router.delete("/SubjectsClass/:id", deleteSubjectsByClass)
 router.get('/SubjectsWithNoTeacher', subjectWithNoTeacher)
+
+//analytics
+router.get('/girlsBoysAdminCount', girlsBoysCount)
+router.get('/teacherGenderCount', techerGenderCount)
 
 module.exports = router;

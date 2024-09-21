@@ -7,16 +7,20 @@ import Fees from "../../assets/img4.png";
 import styled from 'styled-components';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
+import GenderDoughnutChart from '../../components/doughnut';
+import axios from 'axios';
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
     const { studentsList } = useSelector((state) => state.student);
     const { sclassesList } = useSelector((state) => state.sclass);
     const { teachersList } = useSelector((state) => state.teacher);
+    const [girlsVsBoys, setGirlsVsBoys] = useState([]);
+    const [teacherStaff, setTeacherStaff] = useState([]);
 
     const { currentUser } = useSelector(state => state.user)
 
@@ -26,6 +30,16 @@ const AdminHomePage = () => {
         dispatch(getAllStudents(adminID));
         dispatch(getAllSclasses(adminID, "Sclass"));
         dispatch(getAllTeachers(adminID));
+
+        const fetchData = async () => {
+            const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/girlsBoysAdminCount`);
+            setGirlsVsBoys(result.data)
+
+            const result1 = await axios.get(`${process.env.REACT_APP_BASE_URL}/teacherGenderCount`);
+            setTeacherStaff(result1.data)
+        }
+        fetchData();
+
     }, [adminID, dispatch]);
 
     const numberOfStudents = studentsList && studentsList.length;
@@ -36,7 +50,7 @@ const AdminHomePage = () => {
         <>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={3} lg={3}>
+                    <Grid item xs={12} md={3} lg={4}>
                         <StyledPaper>
                             <img src={Students} alt="Students" />
                             <Title>
@@ -45,7 +59,7 @@ const AdminHomePage = () => {
                             <Data start={0} end={numberOfStudents} duration={2.5} />
                         </StyledPaper>
                     </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
+                    <Grid item xs={12} md={3} lg={4}>
                         <StyledPaper>
                             <img src={Classes} alt="Classes" />
                             <Title>
@@ -54,7 +68,7 @@ const AdminHomePage = () => {
                             <Data start={0} end={numberOfClasses} duration={5} />
                         </StyledPaper>
                     </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
+                    <Grid item xs={12} md={3} lg={4}>
                         <StyledPaper>
                             <img src={Teachers} alt="Teachers" />
                             <Title>
@@ -63,18 +77,17 @@ const AdminHomePage = () => {
                             <Data start={0} end={numberOfTeachers} duration={2.5} />
                         </StyledPaper>
                     </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Fees} alt="Fees" />
-                            <Title>
-                                Fees Collection
-                            </Title>
-                            <Data start={0} end={23000} duration={2.5} prefix="$" />                        </StyledPaper>
-                    </Grid>
+
                     <Grid item xs={12} md={12} lg={12}>
                         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                             <SeeNotice />
                         </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={3} lg={6}>
+                        <GenderDoughnutChart chartType={'bar'} labels={['Boys', 'Girls']} dataValues={girlsVsBoys} backgroundColor={['#36A2EB', '#FF6384']} label={'Students Gender'} />
+                    </Grid>
+                    <Grid item xs={12} md={3} lg={6}>
+                        <GenderDoughnutChart chartType={'bar'} labels={['MaleStaff', 'FemaleStaff']} dataValues={teacherStaff} backgroundColor={['#36A2EB', '#FF6384']} label={'Teacher Gender'} />
                     </Grid>
                 </Grid>
             </Container>

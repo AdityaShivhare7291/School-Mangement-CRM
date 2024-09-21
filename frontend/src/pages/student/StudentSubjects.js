@@ -9,6 +9,8 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { StyledTableCell, StyledTableRow } from '../../components/styles';
+import TableTemplate from '../../components/TableTemplate';
+import { BlueButton } from '../../components/buttonStyles';
 
 const StudentSubjects = () => {
 
@@ -42,6 +44,31 @@ const StudentSubjects = () => {
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
     };
+
+
+    const subjectColumns = [
+        { id: 'name', label: 'Name', minWidth: 170 },
+        { id: 'subCode', label: 'Code', minWidth: 100 },
+    ]
+
+    const subjectRows = subjectsList?.map((data) => {
+        return {
+            name: data.subName,
+            subCode: data.subCode
+        };
+    })
+
+    const SubjectsButtonHaver = ({ row }) => {
+        return (
+            <>
+                <BlueButton variant="contained"
+                >
+                    View
+                </BlueButton>
+            </>
+        );
+    };
+
 
     const renderTableSection = () => {
         return (
@@ -90,14 +117,10 @@ const StudentSubjects = () => {
                 <Typography variant="h6" gutterBottom>
                     And these are the subjects:
                 </Typography>
-                {subjectsList &&
-                    subjectsList.map((subject, index) => (
-                        <div key={index}>
-                            <Typography variant="subtitle1">
-                                {subject.subName} ({subject.subCode})
-                            </Typography>
-                        </div>
-                    ))}
+
+                {Array.isArray(subjectsList) && subjectsList.length > 0 &&
+                    <TableTemplate buttonHaver={SubjectsButtonHaver} columns={subjectColumns} rows={subjectRows} />
+                }
             </Container>
         );
     };

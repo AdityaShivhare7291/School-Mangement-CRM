@@ -10,14 +10,17 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { StyledTableCell, StyledTableRow } from '../../components/styles';
 import axios from 'axios';
+import TableTemplate from '../../components/TableTemplate';
+import { BlueButton } from "../../components/buttonStyles";
 
-const StudentSubjects = () => {
+
+const StudentTeacher = () => {
 
     const dispatch = useDispatch();
     const { subjectsList, sclassDetails } = useSelector((state) => state.sclass);
     const { userDetails, currentUser, loading, response, error } = useSelector((state) => state.user);
 
-    const [teacherData, setTeachersData] = useState()
+    const [teacherData, setTeachersData] = useState([])
 
     useEffect(() => {
         console.log({ currentUser })
@@ -26,7 +29,8 @@ const StudentSubjects = () => {
         let className = currentUser.className.className
         const fetchData = async () => {
             const teachers = await axios.get(`${process.env.REACT_APP_BASE_URL}/StudentTeacher/${className}`);
-            setTeachersData(teachers)
+            console.log({ curans: teachers.data })
+            setTeachersData(teachers.data.teachers)
         }
         fetchData()
     }, [dispatch, currentUser._id])
@@ -43,6 +47,8 @@ const StudentSubjects = () => {
             console.log("sclassDetails in class", sclassDetails)
         }
     }, [userDetails])
+
+    useEffect(() => { console.log({ teacherData }) }, [teacherData])
 
     useEffect(() => {
         if (subjectMarks.length == 0) {
@@ -89,6 +95,43 @@ const StudentSubjects = () => {
         return <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />;
     };
 
+
+
+
+    const studentColumns = [
+        { id: 'name', label: 'Name', minWidth: 170 },
+        { id: 'gender', label: 'Gender', minWidth: 100 },
+        { id: 'DOB', label: 'DOB', minWidth: 100 },
+        { id: 'contactDetails', label: 'Phone-no', minWidth: 100 }
+    ]
+
+    const studentRows = teacherData?.map((teacher) => {
+        return {
+            name: teacher.name,
+            gender: teacher.gender,
+            DOB: teacher.DOB,
+            contactDetails: teacher.contactDetails
+        };
+    })
+
+    const SubjectsButtonHaver = ({ row }) => {
+        return (
+            <>
+                <BlueButton variant="contained"
+                >
+                    View
+                </BlueButton>
+            </>
+        );
+    };
+
+
+
+
+
+
+
+
     const renderClassDetailsSection = () => {
         return (
             <Container>
@@ -101,18 +144,15 @@ const StudentSubjects = () => {
                 <Typography variant="h6" gutterBottom>
                     And these are the teachers:
                 </Typography>
-                {subjectsList &&
-                    subjectsList.map((subject, index) => (
-                        <div key={index}>
-                            <Typography variant="subtitle1">
-                                {subject.subName} ({subject.subCode})
-                            </Typography>
-                        </div>
-                    ))}
+
+                {Array.isArray(teacherData) && teacherData.length > 0 &&
+                    <TableTemplate buttonHaver={SubjectsButtonHaver} columns={studentColumns} rows={studentRows} />
+                }
+
+
             </Container>
         );
     };
-
     return (
         <>
             {loading ? (
@@ -151,4 +191,4 @@ const StudentSubjects = () => {
     );
 };
 
-export default StudentSubjects;
+export default StudentTeacher;

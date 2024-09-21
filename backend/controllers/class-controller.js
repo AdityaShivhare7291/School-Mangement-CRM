@@ -11,8 +11,8 @@ const sclassCreate = async (req, res) => {
             teacher: [],
             fees: req.body.sfees,
             students: [],
-            school: req.body.adminID
-
+            school: req.body.adminID,
+            limit: req.body.sLimit
         });
 
         const existingSclassByName = await Sclass.findOne({
