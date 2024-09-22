@@ -112,7 +112,15 @@ const getStudentDetail = async (req, res) => {
 
 const deleteStudent = async (req, res) => {
     try {
-        const result = await Student.findByIdAndDelete(req.params.id)
+        const result = await Student.findById(req.params.id)
+        await Student.findByIdAndDelete(req.params.id)
+
+        const classId = result.className
+        await sclassSchema.updateMany(
+            { _id: classId },
+            { $pull: { students: req.params.id } }
+        );
+
         res.send(result)
     } catch (error) {
         res.status(500).json(err);
@@ -122,6 +130,14 @@ const deleteStudent = async (req, res) => {
 const deleteStudents = async (req, res) => {
     try {
         const result = await Student.deleteMany({ school: req.params.id })
+
+        //After deleting all the students of particular school there will be no students left in any class of that particular school.
+        await sclassSchema.updateMany({
+            school: req.params.id
+        },
+            { $set: { students: [] } }
+        )
+
         if (result.deletedCount === 0) {
             res.send({ message: "No students found to delete" })
         } else {
@@ -134,7 +150,7 @@ const deleteStudents = async (req, res) => {
 
 const deleteStudentsByClass = async (req, res) => {
     try {
-        const result = await Student.deleteMany({ sclassName: req.params.id })
+        const result = await Student.deleteMany({ className: req.params.id })
         if (result.deletedCount === 0) {
             res.send({ message: "No students found to delete" })
         } else {

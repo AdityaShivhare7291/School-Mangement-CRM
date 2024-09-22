@@ -29,24 +29,31 @@ const ChooseClass = ({ situation }) => {
             headers: { 'Content-Type': 'application/json' },
         });
 
-        if (Array.isArray(subjects.data)) {
-            const filteredSubjects = subjects.data.filter((subject) => {
-                console.log(subject)
-                if (subject.className === classID && !subject.teacher) {
-                    return true;
+        if (situation === 'Subject') {
+            navigate(`/Admin/addsubject/${classID}`)
+        }
+        else {
+
+
+            if (Array.isArray(subjects.data)) {
+                const filteredSubjects = subjects.data.filter((subject) => {
+                    console.log(subject)
+                    if (subject.className === classID && !subject.teacher) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                console.log({ filteredSubjects })
+
+                if (filteredSubjects.length > 0) {
+                    navigate('/Admin/teachers/addteacher/' + classID)
+                } else {
+                    navigate("/Admin/teachers/choosesubject/" + classID)
                 }
-                return false;
-            });
-
-            console.log({ filteredSubjects })
-
-            if (filteredSubjects.length > 0) {
-                navigate('/Admin/teachers/addteacher/' + classID)
             } else {
                 navigate("/Admin/teachers/choosesubject/" + classID)
             }
-        } else {
-            navigate("/Admin/teachers/choosesubject/" + classID)
         }
     }
 

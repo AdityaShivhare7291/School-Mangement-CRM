@@ -20,7 +20,7 @@ const ShowSubjects = () => {
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
-        console.log("Before error");
+        console.log("Before error", { currentUser });
         dispatch(getSubjectList(currentUser._id, "AllSubjects"));
         console.log("after error", subjectsList)
     }, [currentUser._id, dispatch]);
@@ -33,15 +33,15 @@ const ShowSubjects = () => {
     const [message, setMessage] = useState("");
 
     const deleteHandler = (deleteID, address) => {
-        console.log(deleteID);
-        console.log(address);
-        setMessage("Sorry the delete function has been disabled for now.")
-        setShowPopup(true)
+        // console.log(deleteID);
+        // console.log(address);
+        // setMessage("Sorry the delete function has been disabled for now.")
+        // setShowPopup(true)
 
-        // dispatch(deleteUser(deleteID, address))
-        //     .then(() => {
-        //         dispatch(getSubjectList(currentUser._id, "AllSubjects"));
-        //     })
+        dispatch(deleteUser(deleteID, address))
+            .then(() => {
+                dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+            })
     }
 
     const subjectColumns = [
@@ -97,7 +97,7 @@ const ShowSubjects = () => {
                         <h1> Add Subjects</h1>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"
-                                onClick={() => navigate("/Admin/subjects/chooseclass")}>
+                                onClick={() => navigate(`/Admin/subjects/chooseclass`)}>
                                 Add Subjects
                             </GreenButton>
                         </Box>
