@@ -11,7 +11,9 @@ dotenv.config();
 
 
 app.use(express.json({ limit: '10mb' }))
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000https://school-mangement-crm-aditya-shivhare.vercel.app/'
+  }));
 
 mongoose
     .connect('mongodb+srv://adityashivhare7291:jq1QfSZQvyEaPxCl@cluster0.cvliz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {

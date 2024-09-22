@@ -121,4 +121,7 @@ router.get('/SubjectsWithNoTeacher', subjectWithNoTeacher)
 router.get('/girlsBoysAdminCount', girlsBoysCount)
 router.get('/teacherGenderCount', techerGenderCount)
 
+//check
+router.get('/check',(req,res)=>{res.send("hello")});
+
 module.exports = router;
