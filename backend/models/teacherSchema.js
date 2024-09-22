@@ -1,10 +1,29 @@
 const mongoose = require("mongoose")
-
 const teacherSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
     },
+    gender: {
+        type: String,
+        required: true,
+    },
+    DOB: {
+        type: Date,
+        required: true,
+    },
+    contactDetails: {
+        type: String,
+        required: true,
+    },
+    salary: {
+        type: Number,
+        required: true,
+    },
+    assignedClass: [{
+        type: String,
+        required: true,
+    }],
     email: {
         type: String,
         unique: true,
@@ -29,7 +48,7 @@ const teacherSchema = new mongoose.Schema({
     },
     teachSclass: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'sclass',
+        ref: 'class',
         required: true,
     },
     attendance: [{

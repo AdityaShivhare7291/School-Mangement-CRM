@@ -12,14 +12,18 @@ import {
     getSubDetailsRequest
 } from './sclassSlice';
 
+
 export const getAllSclasses = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
+        console.log("the getting api is hit on ", { id, address, ans: `${process.env.REACT_APP_BASE_URL}/${address}List/${id}` })
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}List/${id}`);
         if (result.data.message) {
+            console.log("classes", { data: result.data })
             dispatch(getFailedTwo(result.data.message));
         } else {
+            console.log("classes", { data: result.data })
             dispatch(getSuccess(result.data));
         }
     } catch (error) {
@@ -56,10 +60,12 @@ export const getClassDetails = (id, address) => async (dispatch) => {
 }
 
 export const getSubjectList = (id, address) => async (dispatch) => {
+    console.log("getSubjectList", { ans: `${process.env.REACT_APP_BASE_URL}/${address}/${id}` })
     dispatch(getRequest());
 
     try {
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        console.log("result for subjects", { result, ans: `${process.env.REACT_APP_BASE_URL}/${address}/${id}` })
         if (result.data.message) {
             dispatch(getFailed(result.data.message));
         } else {

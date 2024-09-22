@@ -13,6 +13,7 @@ const TeacherSideBar = () => {
     const { currentUser } = useSelector((state) => state.user);
     const sclassName = currentUser.teachSclass
 
+    console.log({ currentUser })
     const location = useLocation();
     return (
         <>
@@ -27,7 +28,7 @@ const TeacherSideBar = () => {
                     <ListItemIcon>
                         <ClassOutlinedIcon color={location.pathname.startsWith("/Teacher/class") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
-                    <ListItemText primary={`Class ${sclassName.sclassName}`} />
+                    <ListItemText primary={`Class`} />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Teacher/complain">
                     <ListItemIcon>

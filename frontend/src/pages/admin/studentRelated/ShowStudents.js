@@ -15,7 +15,6 @@ import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-// import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -33,6 +32,7 @@ const ShowStudents = () => {
 
     useEffect(() => {
         dispatch(getAllStudents(currentUser._id));
+        console.log("studentlist", studentsList)
     }, [currentUser._id, dispatch]);
 
     if (error) {
@@ -47,24 +47,19 @@ const ShowStudents = () => {
         console.log(address);
         setMessage("Sorry the delete function has been disabled for now.")
         setShowPopup(true)
-
-        // dispatch(deleteUser(deleteID, address))
-        //     .then(() => {
-        //         dispatch(getAllStudents(currentUser._id));
-        //     })
     }
 
     const studentColumns = [
         { id: 'name', label: 'Name', minWidth: 170 },
         { id: 'rollNum', label: 'Roll Number', minWidth: 100 },
-        { id: 'sclassName', label: 'Class', minWidth: 170 },
+        { id: 'className', label: 'Class', minWidth: 170 },
     ]
 
     const studentRows = studentsList && studentsList.length > 0 && studentsList.map((student) => {
         return {
             name: student.name,
             rollNum: student.rollNum,
-            sclassName: student.sclassName.sclassName,
+            className: student.className.className,
             id: student._id,
         };
     })

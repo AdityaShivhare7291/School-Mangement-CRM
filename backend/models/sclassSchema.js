@@ -5,21 +5,25 @@ const sclassSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    year:{
-        type:Number,
-        required:true,
+    year: {
+        type: Number,
+        required: true,
     },
-    teacher:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'teacher'
+    limit: {
+        type: Number,
+        required: true,
     },
-    fees:{
-        type:String,
-        required:true,
+    teachers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'teacher'
+    }],
+    fees: {
+        type: Number,
+        required: true,
     },
-    students:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'teacher'
+    students: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'teacher'
     }],
     school: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,5 +31,5 @@ const sclassSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model("student", sclassSchema);
+module.exports = mongoose.model("class", sclassSchema);
 

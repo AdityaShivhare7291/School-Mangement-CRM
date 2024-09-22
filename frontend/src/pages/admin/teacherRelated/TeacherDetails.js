@@ -16,6 +16,7 @@ const TeacherDetails = () => {
         dispatch(getTeacherDetails(teacherID));
     }, [dispatch, teacherID]);
 
+
     if (error) {
         console.log(error);
     }
@@ -39,7 +40,7 @@ const TeacherDetails = () => {
                         Teacher Name: {teacherDetails?.name}
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                        Class Name: {teacherDetails?.teachSclass?.sclassName}
+                        Class Name: {teacherDetails?.teachSclass?.className}
                     </Typography>
                     {isSubjectNamePresent ? (
                         <>

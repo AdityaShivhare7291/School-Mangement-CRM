@@ -5,6 +5,21 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    gender: {
+        type: String,
+        required: true
+    },
+    DOB: {
+        type: Date,
+        required: true
+    },
+    contactDetails: {
+        type: String,
+        required: true,
+    },
+    feesPaid: {
+        type: Number,
+    },
     rollNum: {
         type: Number,
         required: true
@@ -13,9 +28,9 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sclassName: {
+    className: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'sclass',
+        ref: 'class',
         required: true,
     },
     school: {
@@ -26,6 +41,10 @@ const studentSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "Student"
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now  // Automatically set the current date when the document is created
     },
     examResult: [
         {

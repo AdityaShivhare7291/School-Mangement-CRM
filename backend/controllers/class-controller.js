@@ -6,8 +6,13 @@ const Teacher = require('../models/teacherSchema.js');
 const sclassCreate = async (req, res) => {
     try {
         const sclass = new Sclass({
-            sclassName: req.body.sclassName,
-            school: req.body.adminID
+            className: req.body.sclassName,
+            year: req.body.syear,
+            teacher: [],
+            fees: req.body.sfees,
+            students: [],
+            school: req.body.adminID,
+            limit: req.body.sLimit
         });
 
         const existingSclassByName = await Sclass.findOne({
@@ -33,6 +38,7 @@ const sclassList = async (req, res) => {
         if (sclasses.length > 0) {
             res.send(sclasses)
         } else {
+            console.log(e);
             res.send({ message: "No sclasses found" });
         }
     } catch (err) {
@@ -57,7 +63,7 @@ const getSclassDetail = async (req, res) => {
 
 const getSclassStudents = async (req, res) => {
     try {
-        let students = await Student.find({ sclassName: req.params.id })
+        let students = await Student.find({ className: req.params.id })
         if (students.length > 0) {
             let modifiedStudents = students.map((student) => {
                 return { ...student._doc, password: undefined };

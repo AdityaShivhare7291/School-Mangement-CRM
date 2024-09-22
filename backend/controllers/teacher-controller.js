@@ -1,14 +1,15 @@
 const bcrypt = require('bcrypt');
 const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
+const Sclass = require('../models/sclassSchema.js');
 
 const teacherRegister = async (req, res) => {
-    const { name, email, password, role, school, teachSubject, teachSclass } = req.body;
+    const { name, email, password, contactNo, role, school, teachSubject, teachSclass, salary, gender, dob, subjectOption } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
 
-        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachSubject, teachSclass });
+        const teacher = new Teacher({ name, email, gender, DOB: dob, contactDetails: contactNo, salary, password: hashedPass, role, school, teachSubject, teachSclass, assignedClass: subjectOption });
 
         const existingTeacherByEmail = await Teacher.findOne({ email });
 
@@ -17,6 +18,13 @@ const teacherRegister = async (req, res) => {
         }
         else {
             let result = await teacher.save();
+            await Sclass.findByIdAndUpdate(
+                teachSclass,
+                {
+                    $push: { teachers: result._id },
+                },
+            );
+
             await Subject.findByIdAndUpdate(teachSubject, { teacher: teacher._id });
             result.password = undefined;
             res.send(result);
@@ -48,11 +56,36 @@ const teacherLogIn = async (req, res) => {
     }
 };
 
+const getClassTeacher = async (req, res) => {
+    try {
+        console.log("getting teachers", req.params.id)
+
+        let teachers = await Sclass.find({ _id: req.params.id })
+            .populate({
+                path: 'teachers',           // Populate the 'teachers' array
+                select: 'name gender contactDetails salary'  // Select specific fields from each teacher document
+            })
+        console.log("the teachers data", { ans: teachers[0].teachers })
+        if (teachers.length > 0) {
+            let modifiedTeachers = teachers.map((teacher) => {
+                return teacher.teachers
+            });
+            res.send(modifiedTeachers);
+        } else {
+            res.send({ message: "No teachers found" });
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).json(err);
+    }
+}
+
 const getTeachers = async (req, res) => {
     try {
+        console.log("getting teachers")
         let teachers = await Teacher.find({ school: req.params.id })
             .populate("teachSubject", "subName")
-            .populate("teachSclass", "sclassName");
+            .populate("teachSclass", "className");
         if (teachers.length > 0) {
             let modifiedTeachers = teachers.map((teacher) => {
                 return { ...teacher._doc, password: undefined };
@@ -71,7 +104,7 @@ const getTeacherDetail = async (req, res) => {
         let teacher = await Teacher.findById(req.params.id)
             .populate("teachSubject", "subName sessions")
             .populate("school", "schoolName")
-            .populate("teachSclass", "sclassName")
+            .populate("teachSclass", "className")
         if (teacher) {
             teacher.password = undefined;
             res.send(teacher);
@@ -192,6 +225,26 @@ const teacherAttendance = async (req, res) => {
     }
 };
 
+const getStudentTeachersDetails = async (req, res) => {
+
+    console.log("this api is not hitted", req.params.className, typeof (req.params.className))
+    try {
+        let className = req.params.className
+        let classDetails = await Sclass.findOne({ className });
+
+        if (!classDetails) {
+            console.log("Is this hitted")
+            return res.send({ message: 'class not found' });
+        }
+        classDetails = await classDetails.populate('teachers', 'name gender DOB contactDetails')
+        console.log(classDetails)
+        return res.send(classDetails);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+}
+
 module.exports = {
     teacherRegister,
     teacherLogIn,
@@ -201,5 +254,7 @@ module.exports = {
     deleteTeacher,
     deleteTeachers,
     deleteTeachersByClass,
-    teacherAttendance
+    teacherAttendance,
+    getClassTeacher,
+    getStudentTeachersDetails
 };

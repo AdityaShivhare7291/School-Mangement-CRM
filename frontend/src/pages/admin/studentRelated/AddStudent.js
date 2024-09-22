@@ -6,6 +6,7 @@ import Popup from '../../../components/Popup';
 import { underControl } from '../../../redux/userRelated/userSlice';
 import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
 import { CircularProgress } from '@mui/material';
+import axios from 'axios';
 
 const AddStudent = ({ situation }) => {
     const dispatch = useDispatch()
@@ -19,12 +20,47 @@ const AddStudent = ({ situation }) => {
     const [name, setName] = useState('');
     const [rollNum, setRollNum] = useState('');
     const [password, setPassword] = useState('')
-    const [className, setClassName] = useState('')
+    const [classNamer, setClassName] = useState('Select class')
     const [sclassName, setSclassName] = useState('')
+    const [sclassListUpdate, setSclassListUpdate] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
+    const [message, setMessage] = useState("");
+    const [loader, setLoader] = useState(false)
+    const [feesPaid, setFeesPaid] = useState();
+    const [gender, setGender] = useState("Male");
+    const [contactNumber, setContactNumber] = useState();
+    const [date, setDate] = useState();
 
     const adminID = currentUser._id
+    const id = adminID;
     const role = "Student"
     const attendance = []
+
+    const selectStyles = {
+        width: '100%',
+        padding: '10px',
+        fontSize: '8px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        backgroundColor: '#c3b6b6',
+        appearance: 'none',
+        cursor: 'pointer',
+        transition: 'border-color 0.3s ease',
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/SclassList/${id}`);
+            setSclassListUpdate(result.data)
+        }
+        fetchData();
+    }, [])
+
+    useEffect(() => {
+        setClassName(sclassListUpdate[0]?.className);
+        setSclassName(sclassListUpdate[0]?._id);
+    }, [sclassListUpdate])
+
 
     useEffect(() => {
         if (situation === "Class") {
@@ -32,9 +68,6 @@ const AddStudent = ({ situation }) => {
         }
     }, [params.id, situation]);
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [message, setMessage] = useState("");
-    const [loader, setLoader] = useState(false)
 
     useEffect(() => {
         dispatch(getAllSclasses(adminID, "Sclass"));
@@ -45,15 +78,18 @@ const AddStudent = ({ situation }) => {
             setClassName('Select Class');
             setSclassName('');
         } else {
-            const selectedClass = sclassesList.find(
-                (classItem) => classItem.sclassName === event.target.value
-            );
-            setClassName(selectedClass.sclassName);
-            setSclassName(selectedClass._id);
+            sclassListUpdate.forEach((data, index) => {
+                if (data.className === event.target.value) {
+                    setClassName(data.className);
+                    setSclassName(data._id);
+                }
+            })
+
+
         }
     }
 
-    const fields = { name, rollNum, password, sclassName, adminID, role, attendance }
+    const fields = { name, rollNum, password, className: sclassName, adminID, role, attendance, feesPaid, DOB: date, contactDetails: contactNumber, gender }
 
     const submitHandler = (event) => {
         event.preventDefault()
@@ -95,23 +131,43 @@ const AddStudent = ({ situation }) => {
                         onChange={(event) => setName(event.target.value)}
                         autoComplete="name" required />
 
-                    {
-                        situation === "Student" &&
-                        <>
-                            <label>Class</label>
-                            <select
-                                className="registerInput"
-                                value={className}
-                                onChange={changeHandler} required>
-                                <option value='Select Class'>Select Class</option>
-                                {sclassesList.map((classItem, index) => (
-                                    <option key={index} value={classItem.sclassName}>
-                                        {classItem.sclassName}
-                                    </option>
-                                ))}
-                            </select>
-                        </>
-                    }
+                    <label>Gender</label>
+                    <select
+                        className="registerInput"
+                        value={gender}
+                        style={selectStyles}
+                        onChange={(e) => { setGender(e.target.value) }} required>
+                        <option value='Male'>Male</option>
+                        <option value='Female'>Female</option>
+                    </select>
+
+                    <label>Contact Details</label>
+                    <input className="registerInput" type="number" placeholder="Enter Contact Number"
+                        value={contactNumber}
+                        onChange={(event) => setContactNumber(event.target.value)}
+                        autoComplete="contactDetails" required />
+
+                    <label>D.O.B</label>
+                    <input className="registerInput" type="date"
+                        value={date}
+                        onChange={(event) => setDate(event.target.value)}
+                        required />
+
+                    <label>Class</label>
+                    <select
+                        className="registerInput"
+                        value={classNamer}
+                        style={selectStyles}
+                        onChange={changeHandler} required>
+
+                        {sclassListUpdate.map((data, index) => (
+                            <option key={index} value={data.className}>
+                                {data.className}
+                            </option>
+                        ))}
+
+                    </select>
+
 
                     <label>Roll Number</label>
                     <input className="registerInput" type="number" placeholder="Enter student's Roll Number..."
@@ -124,6 +180,12 @@ const AddStudent = ({ situation }) => {
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         autoComplete="new-password" required />
+
+                    <label>Fees Paid</label>
+                    <input className="registerInput" type="number" placeholder="Enter fees paid"
+                        value={feesPaid}
+                        onChange={(event) => setFeesPaid(event.target.value)}
+                        required />
 
                     <button className="registerButton" type="submit" disabled={loader}>
                         {loader ? (

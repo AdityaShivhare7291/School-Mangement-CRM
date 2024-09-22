@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const Student = require('../models/studentSchema.js');
 const Subject = require('../models/subjectSchema.js');
+const sclassSchema = require('../models/sclassSchema.js');
 
 const studentRegister = async (req, res) => {
     try {
@@ -10,25 +11,43 @@ const studentRegister = async (req, res) => {
         const existingStudent = await Student.findOne({
             rollNum: req.body.rollNum,
             school: req.body.adminID,
-            sclassName: req.body.sclassName,
+            className: req.body.className,
         });
 
         if (existingStudent) {
             res.send({ message: 'Roll Number already exists' });
         }
         else {
+
+            let id = req.body.className
+
+            const classLength = await sclassSchema.findById(id);
+            let studentsAvailaible = classLength.students.length;
+
+            if (studentsAvailaible >= classLength.limit) {
+                throw new Error('Insertion cannot be done: The class limit has been reached.');
+            }
+
             const student = new Student({
                 ...req.body,
                 school: req.body.adminID,
                 password: hashedPass
             });
 
+            try {
+                await sclassSchema.findByIdAndUpdate(id, {
+                    $push: { students: student._id },
+                })
+            } catch (e) {
+                console.log(e)
+            }
             let result = await student.save();
 
             result.password = undefined;
             res.send(result);
         }
     } catch (err) {
+        console.log("Error in registrating student", err)
         res.status(500).json(err);
     }
 };
@@ -40,7 +59,7 @@ const studentLogIn = async (req, res) => {
             const validated = await bcrypt.compare(req.body.password, student.password);
             if (validated) {
                 student = await student.populate("school", "schoolName")
-                student = await student.populate("sclassName", "sclassName")
+                student = await student.populate("className", "className")
                 student.password = undefined;
                 student.examResult = undefined;
                 student.attendance = undefined;
@@ -58,7 +77,7 @@ const studentLogIn = async (req, res) => {
 
 const getStudents = async (req, res) => {
     try {
-        let students = await Student.find({ school: req.params.id }).populate("sclassName", "sclassName");
+        let students = await Student.find({ school: req.params.id }).populate("className", "className");
         if (students.length > 0) {
             let modifiedStudents = students.map((student) => {
                 return { ...student._doc, password: undefined };
@@ -76,7 +95,7 @@ const getStudentDetail = async (req, res) => {
     try {
         let student = await Student.findById(req.params.id)
             .populate("school", "schoolName")
-            .populate("sclassName", "sclassName")
+            .populate("className", "className")
             .populate("examResult.subName", "subName")
             .populate("attendance.subName", "subName sessions");
         if (student) {

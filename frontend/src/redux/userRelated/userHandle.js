@@ -12,6 +12,7 @@ import {
     getFailed,
     getError,
 } from './userSlice';
+import { Navigate } from 'react-router-dom';
 
 const REACT_APP_BASE_URL = "http://localhost:5000";
 
@@ -33,12 +34,15 @@ export const loginUser = (fields, role) => async (dispatch) => {
 };
 
 export const registerUser = (fields, role) => async (dispatch) => {
+    console.log("Teacher registration", `${REACT_APP_BASE_URL}/${role}Reg`, fields)
     dispatch(authRequest());
 
     try {
+        console.log("result is updated");
         const result = await axios.post(`${REACT_APP_BASE_URL}/${role}Reg`, fields, {
             headers: { 'Content-Type': 'application/json' },
         });
+        console.log("result is updated", result);
         if (result.data.schoolName) {
             dispatch(authSuccess(result.data));
         }
@@ -111,7 +115,7 @@ export const updateUser = (fields, id, address) => async (dispatch) => {
 
 export const addStuff = (fields, address) => async (dispatch) => {
     dispatch(authRequest());
-
+    console.log({ fields, address, arr: `${REACT_APP_BASE_URL}/${address}Create` })
     try {
         const result = await axios.post(`${REACT_APP_BASE_URL}/${address}Create`, fields, {
             headers: { 'Content-Type': 'application/json' },
@@ -123,6 +127,7 @@ export const addStuff = (fields, address) => async (dispatch) => {
             dispatch(stuffAdded(result.data));
         }
     } catch (error) {
+        console.log("error", error)
         dispatch(authError(error));
     }
 };

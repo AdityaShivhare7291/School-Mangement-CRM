@@ -11,6 +11,10 @@ import styled from "styled-components";
 
 const AddClass = () => {
     const [sclassName, setSclassName] = useState("");
+    const [syear, setSyear] = useState();
+    const [sfees, setSfees] = useState();
+    const [sTeacherName, setSTeacherName] = useState("");
+    const [sLimit, setSLimit] = useState();
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -27,7 +31,10 @@ const AddClass = () => {
 
     const fields = {
         sclassName,
+        syear,
+        sfees,
         adminID,
+        sLimit
     };
 
     const submitHandler = (event) => {
@@ -75,6 +82,43 @@ const AddClass = () => {
                                 value={sclassName}
                                 onChange={(event) => {
                                     setSclassName(event.target.value);
+                                }}
+                                required
+                            />
+                            <TextField
+                                label="limit for admission"
+                                placeholder="Enter limit"
+                                variant="outlined"
+                                value={sLimit}
+                                onChange={(event) => {
+                                    setSLimit(event.target.value);
+                                }}
+                                required
+                            />
+                            <TextField
+                                label="Year"
+                                variant="outlined"
+                                value={syear}
+                                onChange={(event) => {
+                                    setSyear(event.target.value);
+                                }}
+                                required
+                            />
+                            <TextField
+                                label="Class Teacher"
+                                variant="outlined"
+                                value={sTeacherName}
+                                onChange={(event) => {
+                                    setSTeacherName(event.target.value);
+                                }}
+                                required
+                            />
+                            <TextField
+                                label="fees of class"
+                                variant="outlined"
+                                value={sfees}
+                                onChange={(event) => {
+                                    setSfees(event.target.value);
                                 }}
                                 required
                             />

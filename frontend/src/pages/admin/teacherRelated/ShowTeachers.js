@@ -25,6 +25,7 @@ const ShowTeachers = () => {
 
     useEffect(() => {
         dispatch(getAllTeachers(currentUser._id));
+        console.log({ teachersList })
     }, [currentUser._id, dispatch]);
 
     const [showPopup, setShowPopup] = useState(false);
@@ -62,10 +63,11 @@ const ShowTeachers = () => {
     ];
 
     const rows = teachersList.map((teacher) => {
+        console.log("teacher list", teacher)
         return {
             name: teacher.name,
             teachSubject: teacher.teachSubject?.subName || null,
-            teachSclass: teacher.teachSclass.sclassName,
+            teachSclass: teacher.teachSclass.className,
             teachSclassID: teacher.teachSclass._id,
             id: teacher._id,
         };

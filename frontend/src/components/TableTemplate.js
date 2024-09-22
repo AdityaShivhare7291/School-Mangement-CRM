@@ -5,6 +5,7 @@ import { Table, TableBody, TableContainer, TableHead, TablePagination } from '@m
 const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
     return (
         <>
             <TableContainer>
@@ -30,7 +31,7 @@ const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (
@@ -43,6 +44,7 @@ const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
                                                 </StyledTableCell>
                                             );
                                         })}
+
                                         <StyledTableCell align="center">
                                             <ButtonHaver row={row} />
                                         </StyledTableCell>
