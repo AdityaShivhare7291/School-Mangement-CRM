@@ -44,7 +44,7 @@ const TeacherViewStudent = () => {
 
     useEffect(() => {
         if (userDetails) {
-            setSclassName(userDetails.sclassName || '');
+            setSclassName(userDetails.className || '');
             setStudentSchool(userDetails.school || '');
             setSubjectMarks(userDetails.examResult || '');
             setSubjectAttendance(userDetails.attendance || []);
@@ -72,7 +72,7 @@ const TeacherViewStudent = () => {
                     <br />
                     Roll Number: {userDetails.rollNum}
                     <br />
-                    Class: {sclassName.sclassName}
+                    Class: {sclassName.className}
                     <br />
                     School: {studentSchool.schoolName}
                     <br /><br />
