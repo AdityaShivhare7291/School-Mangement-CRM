@@ -11,7 +11,9 @@ dotenv.config();
 
 
 app.use(express.json({ limit: '10mb' }))
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000'
+  }));
 
 mongoose
     .connect('mongodb+srv://adityashivhare7291:jq1QfSZQvyEaPxCl@cluster0.cvliz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
