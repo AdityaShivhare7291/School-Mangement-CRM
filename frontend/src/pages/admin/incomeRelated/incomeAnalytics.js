@@ -251,7 +251,9 @@ const IncomeAnalytics = () => {
         }
         else if (chartTypeTeacherNet === 'monthly') {
             let ans = []
-            for (let i = 0; i < monthlyEaring.length; i++) {
+            let n = max(monthlyEaring.length, monthlyEaringTeacher.length);
+            for (let i = 0; i < n; i++) {
+
                 ans.push(monthlyEaring[i] - monthlyEaringTeacher[i]);
             }
             console.log("nettt yearly earnings", { ans })
