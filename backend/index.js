@@ -2,7 +2,6 @@ const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
-// const bodyParser = require("body-parser")
 const app = express()
 const Routes = require("./routes/route.js")
 
@@ -10,14 +9,12 @@ const PORT = process.env.PORT || 5000
 
 dotenv.config();
 
-// app.use(bodyParser.json({ limit: '10mb', extended: true }))
-// app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 app.use(express.json({ limit: '10mb' }))
 app.use(cors())
 
 mongoose
-    .connect(process.env.MONGO_URL, {
+    .connect('mongodb+srv://adityashivhare7291:jq1QfSZQvyEaPxCl@cluster0.cvliz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
