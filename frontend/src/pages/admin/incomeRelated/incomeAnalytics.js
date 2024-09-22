@@ -270,7 +270,10 @@ const IncomeAnalytics = () => {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Students} alt="Students" />
                             <Title>
                                 Total Students
@@ -279,7 +282,10 @@ const IncomeAnalytics = () => {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Classes} alt="Classes" />
                             <Title>
                                 Total Classes
@@ -288,7 +294,10 @@ const IncomeAnalytics = () => {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Teachers} alt="Teachers" />
                             <Title>
                                 Total Teachers
@@ -297,7 +306,10 @@ const IncomeAnalytics = () => {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Fees} alt="Fees" />
                             <Title>
                                 Fees Collection
@@ -395,7 +407,10 @@ const IncomeAnalytics = () => {
 
 
 const StyledPaper = styled(Paper)`
+background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
   padding: 16px;
+   border-radius: 40px;
+  overflow:hidden;
   display: flex;
   flex-direction: column;
   height: 200px;

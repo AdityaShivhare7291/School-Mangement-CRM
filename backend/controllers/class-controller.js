@@ -83,8 +83,8 @@ const deleteSclass = async (req, res) => {
         if (!deletedClass) {
             return res.send({ message: "Class not found" });
         }
-        const deletedStudents = await Student.deleteMany({ sclassName: req.params.id });
-        const deletedSubjects = await Subject.deleteMany({ sclassName: req.params.id });
+        const deletedStudents = await Student.deleteMany({ className: req.params.id });
+        const deletedSubjects = await Subject.deleteMany({ className: req.params.id });
         const deletedTeachers = await Teacher.deleteMany({ teachSclass: req.params.id });
         res.send(deletedClass);
     } catch (error) {

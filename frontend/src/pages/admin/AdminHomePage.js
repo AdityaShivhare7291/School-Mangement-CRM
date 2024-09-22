@@ -3,7 +3,6 @@ import SeeNotice from '../../components/SeeNotice';
 import Students from "../../assets/img1.png";
 import Classes from "../../assets/img2.png";
 import Teachers from "../../assets/img3.png";
-import Fees from "../../assets/img4.png";
 import styled from 'styled-components';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +11,6 @@ import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
 import GenderDoughnutChart from '../../components/doughnut';
-import axios from 'axios';
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
@@ -31,16 +29,39 @@ const AdminHomePage = () => {
         dispatch(getAllSclasses(adminID, "Sclass"));
         dispatch(getAllTeachers(adminID));
 
-        const fetchData = async () => {
-            const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/girlsBoysAdminCount`);
-            setGirlsVsBoys(result.data)
+        // const fetchData = async () => {
+        //     const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/girlsBoysAdminCount`);
+        //     setGirlsVsBoys(result.data)
 
-            const result1 = await axios.get(`${process.env.REACT_APP_BASE_URL}/teacherGenderCount`);
-            setTeacherStaff(result1.data)
-        }
-        fetchData();
+        //     const result1 = await axios.get(`${process.env.REACT_APP_BASE_URL}/teacherGenderCount`);
+        //     setTeacherStaff(result1.data)
+        // }
+        // fetchData();
 
     }, [adminID, dispatch]);
+
+    useEffect(() => {
+
+        if (studentsList) {
+            let numberOfGirls = 0;
+            let numberOfBoys = 0;
+            studentsList.forEach(element => {
+                element.gender === 'Male' ? numberOfBoys++ : numberOfGirls++;
+            });
+            setGirlsVsBoys([numberOfBoys, numberOfGirls])
+        }
+
+        if (teachersList) {
+            let numberOfGirls = 0;
+            let numberOfBoys = 0;
+            teachersList.forEach(element => {
+                element.gender === 'Male' ? numberOfBoys++ : numberOfGirls++;
+            });
+            setTeacherStaff([numberOfBoys, numberOfGirls])
+        }
+
+
+    }, [studentsList, sclassesList, teachersList])
 
     const numberOfStudents = studentsList && studentsList.length;
     const numberOfClasses = sclassesList && sclassesList.length;
@@ -51,7 +72,10 @@ const AdminHomePage = () => {
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={3} lg={4}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Students} alt="Students" />
                             <Title>
                                 Total Students
@@ -60,7 +84,10 @@ const AdminHomePage = () => {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={4}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Classes} alt="Classes" />
                             <Title>
                                 Total Classes
@@ -69,7 +96,10 @@ const AdminHomePage = () => {
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={4}>
-                        <StyledPaper>
+                        <StyledPaper sx={{
+                            borderRadius: "40px",
+                            overflow: "hidden"
+                        }}>
                             <img src={Teachers} alt="Teachers" />
                             <Title>
                                 Total Teachers
@@ -90,14 +120,16 @@ const AdminHomePage = () => {
                         <GenderDoughnutChart chartType={'bar'} labels={['MaleStaff', 'FemaleStaff']} dataValues={teacherStaff} backgroundColor={['#36A2EB', '#FF6384']} label={'Teacher Gender'} />
                     </Grid>
                 </Grid>
-            </Container>
+            </Container >
         </>
     );
 };
 
 
 const StyledPaper = styled(Paper)`
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
   padding: 16px;
+ 
   display: flex;
   flex-direction: column;
   height: 200px;
