@@ -4,13 +4,14 @@ import { Container, Grid, Box, Button } from '@mui/material';
 import styled from 'styled-components';
 import Students from "../assets/students.svg";
 import { LightPurpleButton } from '../components/buttonStyles';
+import LottieAnimation from '../assets/studentsanimation';
 
 const Homepage = () => {
     return (
-        <StyledContainer>
+        <StyledContainer >
             <Grid container spacing={0}>
                 <Grid item xs={12} md={6}>
-                    <img src={Students} alt="students" style={{ width: '100%' }} />
+                    <LottieAnimation />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <StyledPaper elevation={3}>
@@ -19,7 +20,7 @@ const Homepage = () => {
                             <br />
                             School Management
                             <br />
-                            System
+                            CRM System
                         </StyledTitle>
                         <StyledText>
                             Streamline school management, class organization, and add students and faculty.
@@ -27,21 +28,28 @@ const Homepage = () => {
                             Access records, view marks, and communicate effortlessly.
                         </StyledText>
                         <StyledBox>
-                            <StyledLink to="/choose">
-                                <LightPurpleButton variant="contained" fullWidth>
-                                    Login
-                                </LightPurpleButton>
-                            </StyledLink>
-                            <StyledLink to="/chooseasguest">
-                                <Button variant="outlined" fullWidth
-                                    sx={{ mt: 2, mb: 3, color: "#7f56da", borderColor: "#7f56da" }}
-                                >
-                                    Login as Guest
-                                </Button>
-                            </StyledLink>
+                            <Grid container spacing={2} justifyContent="center">
+                                <Grid item xs={6}>
+                                    <StyledLink to="/choose">
+                                        <LightPurpleButton variant="contained" fullWidth>
+                                            Login
+                                        </LightPurpleButton>
+                                    </StyledLink>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <StyledLink to="/chooseasguest">
+                                        <Button
+                                            variant="outlined"
+                                            fullWidth
+                                            sx={{ color: "#7f56da", borderColor: "#7f56da" }}
+                                        >Login as Guest
+                                        </Button>
+                                    </StyledLink>
+                                </Grid>
+                            </Grid>
                             <StyledText>
                                 Don't have an account?{' '}
-                                <Link to="/Adminregister" style={{color:"#550080"}}>
+                                <Link to="/Adminregister" style={{ color: "#550080" }}>
                                     Sign up
                                 </Link>
                             </StyledText>

@@ -8,7 +8,7 @@ import {
   CircularProgress,
   Backdrop,
 } from '@mui/material';
-import { AccountCircle, School, Group } from '@mui/icons-material';
+import { AccountCircle, School, Group, Height } from '@mui/icons-material';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/userRelated/userHandle';
@@ -83,12 +83,14 @@ const ChooseUser = ({ visitor }) => {
   }, [status, currentRole, navigate, currentUser]);
 
   return (
-    <StyledContainer>
-      <Container>
+    <StyledContainer >
+      <Container >
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} sm={6} md={4}>
             <div onClick={() => navigateHandler("Admin")}>
-              <StyledPaper elevation={3}>
+              <StyledPaper elevation={3} sx={{
+                borderRadius: '16px',
+              }}>
                 <Box mb={2}>
                   <AccountCircle fontSize="large" />
                 </Box>
@@ -100,7 +102,9 @@ const ChooseUser = ({ visitor }) => {
             </div>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <StyledPaper elevation={3}>
+            <StyledPaper elevation={3} sx={{
+              borderRadius: '16px',
+            }}>
               <div onClick={() => navigateHandler("Student")}>
                 <Box mb={2}>
                   <School fontSize="large" />
@@ -113,7 +117,9 @@ const ChooseUser = ({ visitor }) => {
             </StyledPaper>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <StyledPaper elevation={3}>
+            <StyledPaper elevation={3} sx={{
+              borderRadius: '16px',
+            }}>
               <div onClick={() => navigateHandler("Teacher")}>
                 <Box mb={2}>
                   <Group fontSize="large" />
@@ -142,8 +148,8 @@ const ChooseUser = ({ visitor }) => {
 export default ChooseUser;
 
 const StyledContainer = styled.div`
-  background: linear-gradient(to bottom, #411d70, #19118b);
-  height: 120vh;
+ background: linear-gradient(to bottom, #411d70, #19118b)
+  height: 98vh;
   display: flex;
   justify-content: center;
   padding: 2rem;

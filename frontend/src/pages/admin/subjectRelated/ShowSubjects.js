@@ -92,14 +92,16 @@ const ShowSubjects = () => {
                 <div>Loading...</div>
                 :
                 <>
-                    <h1>classes</h1>
-                    {response ?
+
+                    {response ? (<>
+                        <h1> Add Subjects</h1>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"
                                 onClick={() => navigate("/Admin/subjects/chooseclass")}>
                                 Add Subjects
                             </GreenButton>
                         </Box>
+                    </>)
                         :
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                             {Array.isArray(subjectsList) && subjectsList.length > 0 &&

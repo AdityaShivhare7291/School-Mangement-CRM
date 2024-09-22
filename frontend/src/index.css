@@ -12,17 +12,25 @@ a {
   display: none;
 }
 
-:root {
+/* :root {
   --color-bg: #1f1f38;
   --color-bg-variant: #2c2c6c;
   --color-primary: #4db5ff;
   --color-primary-variant: rgba(77, 181, 255, 0.4);
   --color-light: rgba(255, 255, 255, 0.6);
+} */
+
+:root {
+  --color-bg: #7695FF;
+  --color-bg-variant: #9DBDFF;
+  --color-primary: #FFD7C4;
+  --color-primary-variant: #FF9874;
+  --color-light: rgba(255, 255, 255, 0.6);
 }
 
 /* FORM */
 .register {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,7 +48,7 @@ a {
 }
 
 .registerForm {
-  margin-top: -50px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
 }

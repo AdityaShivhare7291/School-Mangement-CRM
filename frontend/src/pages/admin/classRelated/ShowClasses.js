@@ -25,6 +25,7 @@ const ShowClasses = () => {
 
   useEffect(() => {
     dispatch(getAllSclasses(adminID, "Sclass"));
+    console.log({ getresponse })
   }, [adminID, dispatch]);
 
 
@@ -146,24 +147,27 @@ const ShowClasses = () => {
   return (
     <>
       {loading ?
-        <div>Loading...</div>
+        (<div>Loading...</div>)
         :
-        <>
-          {getresponse ?
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
-              <GreenButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
-                Add Class
-              </GreenButton>
-            </Box>
-            :
-            <>
-              <h1>loaded</h1>
-              {Array.isArray(sclassesList) && sclassesList.length > 0 &&
-                <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
-              }
-              <SpeedDialTemplate actions={actions} />
-            </>}
-        </>
+        (<>
+          {!sclassesList.length ?
+            (<>
+              <h1>Add Class</h1>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                <GreenButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
+                  Add Class
+                </GreenButton>
+              </Box>
+            </>)
+
+            : (
+              <>
+                {Array.isArray(sclassesList) && sclassesList.length > 0 &&
+                  <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
+                }
+                <SpeedDialTemplate actions={actions} />
+              </>)}
+        </>)
       }
       <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
 

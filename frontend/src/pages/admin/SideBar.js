@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Divider, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
-
 import HomeIcon from "@mui/icons-material/Home";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -58,7 +57,7 @@ const SideBar = () => {
                     <ListItemIcon>
                         <CurrencyExchangeIcon color={location.pathname.startsWith("/Admin/income") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
-                    <ListItemText primary="Notices" />
+                    <ListItemText primary="Analytics" />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Admin/complains">
                     <ListItemIcon>

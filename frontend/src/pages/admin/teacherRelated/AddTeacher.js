@@ -26,9 +26,6 @@ const AddTeacher = () => {
   const [dob, setDob] = useState();
   const [contactNo, setContactNo] = useState();
   const [subjectOption, setSubjectOption] = useState();
-  // let teachSubject = null;
-  // let school = null;
-  // let teachSclass = null;
 
   const [teachSubject, setTeachSubject] = useState(null);
   const [school, setSchool] = useState(null);
