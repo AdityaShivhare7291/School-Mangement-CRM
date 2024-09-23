@@ -238,9 +238,9 @@ const IncomeAnalytics = () => {
             setChartType('monthly');
             setChartTypeTeacher('monthly');
             setSelectYear(selectYearTeacherNet);
-            setSelectYearTeacherNet(selectYearTeacherNet);
+            setSelectYearTeacher(selectYearTeacherNet);
         }
-    }, [sclassesList, teachersList, chartTypeTeacherNet])
+    }, [sclassesList, teachersList, chartTypeTeacherNet, selectYearTeacherNet])
 
     useEffect(() => {
 
