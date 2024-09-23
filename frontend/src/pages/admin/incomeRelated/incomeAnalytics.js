@@ -66,7 +66,7 @@ const IncomeAnalytics = () => {
             })
 
 
-
+            console.log("Student Earning is running")
             try {
                 if (chartType === 'yearly') {
                     sclassesList.forEach((classer) => {
@@ -97,13 +97,16 @@ const IncomeAnalytics = () => {
                     console.log('Years:', years);
                     console.log('Profits:', profits);
                 }
-                else if (chartType === 'monthly') {
+                else if (chartType === 'monthly' && studentsList) {
                     let month;
+                    console.log({ studentsList });
                     studentsList.forEach((student) => {
                         const studentPaid = classPrices.get(student.className.className).fees;
                         const studentYear = classPrices.get(student.className.className).year;
 
-                        if (studentYear === selectYear) {
+                        console.log("student year", { studentPaid, studentYear, selectYear })
+
+                        if (studentYear === parseInt(selectYear, 10)) {
                             if (student.createdAt)
                                 month = new Date(student.createdAt).getMonth();
                             else {
@@ -140,7 +143,7 @@ const IncomeAnalytics = () => {
             }
         }
         StudentsEarning();
-    }, [sclassesList, chartType, selectYear])
+    }, [sclassesList, studentsList, chartType, selectYear])
 
     useEffect(() => {
         const TeacherEarning = async () => {
@@ -187,9 +190,9 @@ const IncomeAnalytics = () => {
                     teachersList.forEach((teacher) => {
                         const teacherGetPaid = teacher.salary;
                         const teacherYear = classPrices.get(teacher.teachSclass.className).year;
+
                         console.log("IT is not entering here", { teacherYear, selectYearTeacher })
-                        if (teacherYear === selectYearTeacher) {
-                            console.log("IT is not entering here")
+                        if (teacherYear === parseInt(selectYearTeacher, 10)) {
                             if (teacher.createdAt)
                                 month = new Date(teacher.createdAt).getMonth();
                             else {
@@ -251,7 +254,7 @@ const IncomeAnalytics = () => {
         }
         else if (chartTypeTeacherNet === 'monthly') {
             let ans = []
-            let n = max(monthlyEaring.length, monthlyEaringTeacher.length);
+            let n = Math.max(monthlyEaring.length, monthlyEaringTeacher.length);
             for (let i = 0; i < n; i++) {
 
                 ans.push(monthlyEaring[i] - monthlyEaringTeacher[i]);
